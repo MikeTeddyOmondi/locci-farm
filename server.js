@@ -676,7 +676,7 @@ import AfricasTalking from "africastalking";
           method: "POST",
           payload: { source: "locci_scheduler" },
         },
-        intervalSeconds: 60, // 1 minutes
+        intervalSeconds: 120, // 2 minutes
       });
 
       // Irrigation assessment every 2 hours during daylight
@@ -688,7 +688,7 @@ import AfricasTalking from "africastalking";
           method: "POST",
           payload: { source: "locci_scheduler" },
         },
-        intervalSeconds: 120, // 2 minutes
+        intervalSeconds: 300, // 5 minutes
       });
 
       // Market price updates twice daily
