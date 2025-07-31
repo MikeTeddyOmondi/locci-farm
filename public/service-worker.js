@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = "expense-tracker-cache-v1";
+const CACHE_NAME = "locci-farm-cache-v1";
 const urlsToCache = [
   "/",
   "/index.html",
