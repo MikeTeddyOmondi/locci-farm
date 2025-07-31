@@ -1,0 +1,36 @@
+{
+  "name": "@locci-farm/service",
+  "version": "1.0.0",
+  "description": "Locci Farm IoT Service",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "cron",
+    "scheduler",
+    "tasks"
+  ],
+  "author": "MikeTeddyOmondi <me@mt0.dev>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.5",
+  "dependencies": {
+    "@bull-board/api": "^6.12.0",
+    "@bull-board/express": "^6.12.0",
+    "@locci-scheduler/client": "1.0.0-beta",
+    "africastalking": "^0.7.3",
+    "bull": "^4.16.5",
+    "dotenv": "^17.2.1",
+    "express": "4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "msgpackr-extract"
+    ]
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

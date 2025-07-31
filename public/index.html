@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriTech Business w/ Locci Scheduler </title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .header-left h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-left p {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+
+        .brand-highlight {
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .time-display {
+            font-size: 1.5rem;
+            font-family: 'Courier New', monospace;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid;
+        }
+
+        .metric-card.blue { border-left-color: #3b82f6; }
+        .metric-card.orange { border-left-color: #f97316; }
+        .metric-card.green { border-left-color: #10b981; }
+        .metric-card.purple { border-left-color: #8b5cf6; }
+
+        .metric-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-info h3 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-status {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .metric-icon {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .panel-title i {
+            margin-right: 0.5rem;
+            color: #2563eb;
+        }
+
+        .panel-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .task-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: box-shadow 0.2s;
+        }
+
+        .task-item:hover {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .task-icon {
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .task-icon.active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .task-icon.paused {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .task-info h4 {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-interval {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .task-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .task-timing {
+            text-align: right;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+
+        .task-next {
+            color: #374151;
+        }
+
+        .task-last {
+            color: #9ca3af;
+        }
+
+        .task-button {
+            background: none;
+            border: none;
+            padding: 0.25rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .task-button:hover {
+            background: #f3f4f6;
+        }
+
+        .task-button.active {
+            color: #16a34a;
+        }
+
+        .task-button.paused {
+            color: #6b7280;
+        }
+
+        .task-button.trigger {
+            color: #2563eb;
+        }
+
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 4px solid;
+        }
+
+        .notification-item.alert {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .notification-item.market {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .notification-item.success {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .notification-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .notification-message {
+            flex: 1;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-meta {
+            display: flex;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #6b7280;
+            gap: 0.5rem;
+        }
+
+        .notification-icon {
+            padding: 0.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-icon.alert {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .notification-icon.market {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .notification-icon.success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .demo-footer {
+            margin-top: 2rem;
+            background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+        }
+
+        .demo-footer h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-footer p {
+            color: #bfdbfe;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .demo-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .demo-feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .demo-feature-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .demo-feature-desc {
+            font-size: 0.875rem;
+            color: #bfdbfe;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-indicator.active {
+            background: #10b981;
+        }
+
+        .status-indicator.paused {
+            background: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>🌾 Locci Farm</h1>
+                <p>Powered by <span class="brand-highlight">Locci Scheduler</span> + BullMQ + Africa's Talking</p>
+            </div>
+            <div class="header-right">
+                <div class="time-display" id="current-time"></div>
+                <div class="location">
+                    <i data-lucide="map-pin" style="width: 16px; height: 16px; margin-right: 4px;"></i>
+                    Nairobi, Kenya
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card blue">
+                <div class="metric-content">
+                    <div class="metric-info">
+                        <h3>Soil Moisture</h3>
+                        <div class="metric-value" id="soil-moisture">25.0%</div>
+                        <div class="metric-status" id="moisture-status">🚨 Critical Low</div>
+                    </div>
+                    <i data-lucide="droplets" class="metric-icon" style="color: #ef4444;"></i>
+                </div>
+            </div>
+
+            <div class="metric-card orange">
+                <div class="metric-content">
+                    <div class="metric-info">
+                        <h3>Temperature</h3>
+                        <div class="metric-value" id="temperature">28.0°C</div>
+                        <div class="metric-status" id="temp-status">🌡️ Normal</div>
+                    </div>
+                    <i data-lucide="thermometer" class="metric-icon" style="color: #f97316;"></i>
+                </div>
+            </div>
+
+            <div class="metric-card green">
+                <div class="metric-content">
+                    <div class="metric-info">
+                        <h3>Maize Price</h3>
+                        <div class="metric-value" id="maize-price">85 KES</div>
+                        <div class="metric-status" id="price-status">📈 High - Sell!</div>
+                    </div>
+                    <i data-lucide="trending-up" class="metric-icon" style="color: #16a34a;"></i>
+                </div>
+            </div>
+
+            <div class="metric-card purple">
+                <div class="metric-content">
+                    <div class="metric-info">
+                        <h3>Active Tasks</h3>
+                        <div class="metric-value" id="active-tasks">4</div>
+                        <div class="metric-status">⏰ Scheduled Operations</div>
+                    </div>
+                    <i data-lucide="zap" class="metric-icon" style="color: #8b5cf6;"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Scheduled Tasks -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <i data-lucide="calendar"></i>
+                        Scheduled Tasks
+                    </h2>
+                    <div class="panel-subtitle" id="next-update">
+                        Next update in 5m
+                    </div>
+                </div>
+
+                <div class="task-list" id="task-list">
+                    <!-- Tasks will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- SMS Notifications -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <i data-lucide="smartphone" style="color: #16a34a;"></i>
+                        Notifications
+                    </h2>
+                    <div class="panel-subtitle">
+                        <i data-lucide="bell" style="width: 16px; height: 16px; margin-right: 4px;"></i>
+                        Africa's Talking
+                    </div>
+                </div>
+
+                <div class="notification-list" id="notification-list">
+                    <!-- Notifications will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Footer -->
+        <div class="demo-footer">
+            <h3>🚀 AgriTech Business Powered by Locci Scheduler & Africa's Talking </h3>
+            <p>
+                Dashboard showing how Locci Scheduler orchestrates time-critical farm operations, 
+                integrates with BullMQ for job processing, and sends real-time SMS notifications via Africa's Talking.
+            </p>
+            <div class="demo-features">
+                <div class="demo-feature">
+                    <div class="demo-feature-title">🎯 For Developers</div>
+                    <div class="demo-feature-desc">No cron servers • Simple webhooks • Reliable scheduling</div>
+                </div>
+                <div class="demo-feature">
+                    <div class="demo-feature-title">📈 For Business</div>
+                    <div class="demo-feature-desc">Reduced costs • Better yields • Automated operations</div>
+                </div>
+                <div class="demo-feature">
+                    <div class="demo-feature-title">🌍 For Farmers</div>
+                    <div class="demo-feature-desc">Timely alerts • SMS notifications • Improved productivity</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Application state
+        let sensorData = {
+            soilMoisture: 25,
+            temperature: 28,
+            humidity: 65,
+            lastUpdated: new Date()
+        };
+
+        let marketPrices = {
+            maize: 85,
+            beans: 120,
+            tomatoes: 55
+        };
+
+        let scheduledTasks = [
+            {
+                id: 1,
+                name: "IoT Sensor Data Collection",
+                status: "active",
+                nextRun: new Date(Date.now() + 300000),
+                interval: "15 minutes",
+                lastRun: new Date(Date.now() - 900000),
+                type: "sensors",
+                icon: "activity"
+            },
+            {
+                id: 2,
+                name: "Irrigation Assessment", 
+                status: "active",
+                nextRun: new Date(Date.now() + 3600000),
+                interval: "2 hours",
+                lastRun: new Date(Date.now() - 3600000),
+                type: "irrigation",
+                icon: "droplets"
+            },
+            {
+                id: 3,
+                name: "Market Price Updates",
+                status: "active",
+                nextRun: new Date(Date.now() + 21600000),
+                interval: "12 hours", 
+                lastRun: new Date(Date.now() - 21600000),
+                type: "market",
+                icon: "trending-up"
+            },
+            {
+                id: 4,
+                name: "Equipment Maintenance Check",
+                status: "active",
+                nextRun: new Date(Date.now() + 432000000),
+                interval: "7 days",
+                lastRun: new Date(Date.now() - 172800000),
+                type: "maintenance",
+                icon: "wrench"
+            }
+        ];
+
+        let notifications = [
+            {
+                id: 1,
+                message: "🚨 Low soil moisture detected (25%). Auto-irrigation started.",
+                timestamp: new Date(Date.now() - 300000),
+                type: "alert",
+                phone: "+254712345678"
+            },
+            {
+                id: 2,
+                message: "📈 Maize prices up! Current: 85 KES/kg. Consider selling.",
+                timestamp: new Date(Date.now() - 1800000),
+                type: "market",
+                phone: "+254712345678"
+            },
+            {
+                id: 3,
+                message: "✅ Irrigation completed for Zone A. Duration: 30 minutes.",
+                timestamp: new Date(Date.now() - 3600000),
+                type: "success",
+                phone: "+254712345678"
+            }
+        ];
+
+        // Utility functions
+        function formatTimeLeft(date) {
+            const diff = date - new Date();
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            
+            if (days > 0) return `${days}d ${hours % 24}h`;
+            if (hours > 0) return `${hours}h ${minutes % 60}m`;
+            return `${minutes}m`;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleTimeString();
+        }
+
+        function updateMetrics() {
+            // Update soil moisture
+            const moistureEl = document.getElementById('soil-moisture');
+            const moistureStatusEl = document.getElementById('moisture-status');
+            moistureEl.textContent = sensorData.soilMoisture.toFixed(1) + '%';
+            
+            if (sensorData.soilMoisture < 30) {
+                moistureStatusEl.textContent = '🚨 Critical Low';
+                moistureEl.parentElement.parentElement.querySelector('[data-lucide="droplets"]').style.color = '#ef4444';
+            } else if (sensorData.soilMoisture < 50) {
+                moistureStatusEl.textContent = '⚠️ Low';
+                moistureEl.parentElement.parentElement.querySelector('[data-lucide="droplets"]').style.color = '#f97316';
+            } else {
+                moistureStatusEl.textContent = '✅ Optimal';
+                moistureEl.parentElement.parentElement.querySelector('[data-lucide="droplets"]').style.color = '#3b82f6';
+            }
+
+            // Update temperature
+            const tempEl = document.getElementById('temperature');
+            const tempStatusEl = document.getElementById('temp-status');
+            tempEl.textContent = sensorData.temperature.toFixed(1) + '°C';
+            
+            if (sensorData.temperature > 35) {
+                tempStatusEl.textContent = '🔥 High';
+            } else if (sensorData.temperature < 20) {
+                tempStatusEl.textContent = '❄️ Low';
+            } else {
+                tempStatusEl.textContent = '🌡️ Normal';
+            }
+
+            // Update maize price
+            const priceEl = document.getElementById('maize-price');
+            const priceStatusEl = document.getElementById('price-status');
+            priceEl.textContent = marketPrices.maize.toFixed(0) + ' KES';
+            
+            if (marketPrices.maize > 80) {
+                priceStatusEl.textContent = '📈 High - Sell!';
+            } else {
+                priceStatusEl.textContent = '📊 Normal';
+            }
+
+            // Update active tasks count
+            const activeCount = scheduledTasks.filter(t => t.status === 'active').length;
+            document.getElementById('active-tasks').textContent = activeCount;
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+
+            scheduledTasks.forEach(task => {
+                const taskEl = document.createElement('div');
+                taskEl.className = 'task-item';
+                taskEl.innerHTML = `
+                    <div class="task-content">
+                        <div class="task-left">
+                            <div class="task-icon ${task.status}">
+                                <i data-lucide="${task.icon}" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <div class="task-info">
+                                <h4>${task.name}</h4>
+                                <div class="task-interval">Every ${task.interval}</div>
+                            </div>
+                        </div>
+                        <div class="task-right">
+                            <div class="task-timing">
+                                <div class="task-next">Next: ${formatTimeLeft(task.nextRun)}</div>
+                                <div class="task-last">Last: ${task.lastRun.toLocaleTimeString()}</div>
+                            </div>
+                            <button class="task-button ${task.status}" onclick="toggleTask(${task.id})" title="${task.status === 'active' ? 'Pause' : 'Resume'} Task">
+                                <i data-lucide="${task.status === 'active' ? 'pause' : 'play'}" style="width: 16px; height: 16px;"></i>
+                            </button>
+                            <button class="task-button trigger" onclick="triggerTask(${task.id})" title="Manual Trigger">
+                                <i data-lucide="zap" style="width: 16px; height: 16px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                taskList.appendChild(taskEl);
+            });
+
+            // Reinitialize icons
+            lucide.createIcons();
+        }
+
+        function renderNotifications() {
+            const notificationList = document.getElementById('notification-list');
+            notificationList.innerHTML = '';
+
+            notifications.forEach(notification => {
+                const notificationEl = document.createElement('div');
+                notificationEl.className = `notification-item ${notification.type}`;
+                
+                let iconName = 'alert-triangle';
+                if (notification.type === 'market') iconName = 'trending-up';
+                if (notification.type === 'success') iconName = 'check-circle';
+
+                notificationEl.innerHTML = `
+                    <div class="notification-content">
+                        <div style="flex: 1;">
+                            <div class="notification-message">${notification.message}</div>
+                            <div class="notification-meta">
+                                <i data-lucide="smartphone" style="width: 12px; height: 12px;"></i>
+                                ${notification.phone}
+                                <span>•</span>
+                                ${notification.timestamp.toLocaleTimeString()}
+                            </div>
+                        </div>
+                        <div class="notification-icon ${notification.type}">
+                            <i data-lucide="${iconName}" style="width: 16px; height: 16px;"></i>
+                        </div>
+                    </div>
+                `;
+                notificationList.appendChild(notificationEl);
+            });
+
+            // Reinitialize icons
+            lucide.createIcons();
+        }
+
+        function toggleTask(taskId) {
+            const task = scheduledTasks.find(t => t.id === taskId);
+            if (task) {
+                task.status = task.status === 'active' ? 'paused' : 'active';
+                renderTasks();
+                updateMetrics();
+            }
+        }
+
+        function triggerTask(taskId) {
+            const task = scheduledTasks.find(t => t.id === taskId);
+            if (task) {
+                // Update last run time
+                task.lastRun = new Date();
+                
+                // Add notification
+                const newNotification = {
+                    id: Date.now(),
+                    message: `🔄 Manual trigger: ${task.name} executed successfully`,
+                    timestamp: new Date(),
+                    type: "success",
+                    phone: "+254712345678"
+                };
+                notifications.unshift(newNotification);
+                notifications = notifications.slice(0, 10); // Keep only last 10
+                
+                renderTasks();
+                renderNotifications();
+            }
+        }
+
+        function simulateRealTimeUpdates() {
+            // Simulate sensor data changes
+            if (Math.random() < 0.1) {
+                sensorData.soilMoisture = Math.max(20, Math.min(80, 
+                    sensorData.soilMoisture + (Math.random() - 0.5) * 10));
+                sensorData.temperature = Math.max(20, Math.min(40, 
+                    sensorData.temperature + (Math.random() - 0.5) * 5));
+                sensorData.humidity = Math.max(40, Math.min(90, 
+                    sensorData.humidity + (Math.random() - 0.5) * 10));
+                sensorData.lastUpdated = new Date();
+                updateMetrics();
+            }
+
+            // Simulate market price changes
+            if (Math.random() < 0.05) {
+                marketPrices.maize = Math.max(70, Math.min(100, 
+                    marketPrices.maize + (Math.random() - 0.5) * 10));
+                marketPrices.beans = Math.max(100, Math.min(150, 
+                    marketPrices.beans + (Math.random() - 0.5) * 15));
+                marketPrices.tomatoes = Math.max(40, Math.min(80, 
+                    marketPrices.tomatoes + (Math.random() - 0.5) * 8));
+                updateMetrics();
+            }
+
+            // Update next update timer
+            const nextTask = scheduledTasks.find(t => t.status === 'active');
+            if (nextTask) {
+                document.getElementById('next-update').textContent = 
+                    `Next update in ${formatTimeLeft(nextTask.nextRun)}`;
+            }
+        }
+
+        // Initialize the application
+        function init() {
+            updateTime();
+            updateMetrics();
+            renderTasks();
+            renderNotifications();
+
+            // Set up periodic updates
+            setInterval(updateTime, 1000);
+            setInterval(simulateRealTimeUpdates, 2000);
+            setInterval(() => {
+                renderTasks(); // Update time displays in tasks
+            }, 60000);
+        }
+
+        // Start the application when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
