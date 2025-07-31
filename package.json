@@ -22,6 +22,7 @@
     "@locci-scheduler/client": "1.0.0-beta",
     "africastalking": "^0.7.3",
     "bull": "^4.16.5",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "4"
   },

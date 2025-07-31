@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Locci Farm - AgriTech Business w/ Locci Scheduler </title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="./js/tailwind.min.js"></script>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#2196F3" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="/images/icons/icon-192x192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="PWA App" />
+
+    <!-- iOS splash screens -->
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/iphone5_splash.png"
+      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/iphone6_splash.png"
+      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/iphoneplus_splash.png"
+      media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/iphonex_splash.png"
+      media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/iphonexr_splash.png"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/iphonexsmax_splash.png"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/ipad_splash.png"
+      media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/ipadpro1_splash.png"
+      media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/ipadpro2_splash.png"
+      media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      href="/images/splash/ipadpro3_splash.png"
+      media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+    />
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/css/styles.css" as="style" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/styles.css" />
+
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="My PWA App" />
+    <meta
+      property="og:description"
+      content="A sample Progressive Web App that works offline"
+    />
+    <meta property="og:image" content="/images/social-share.png" />
+    <meta property="og:url" content="https://mypwa.example.com" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      :root {
+        --ghibli-blue: #7fc2f4;
+        --ghibli-green: #8bd0ab;
+        --ghibli-cream: #f9f7e8;
+        --ghibli-pink: #f6b6c9;
+        --ghibli-brown: #8f6f5c;
+      }
+
+      body {
+        background-color: var(--ghibli-cream);
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%238bd0ab' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .ghibli-card {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 1rem;
+        box-shadow: 0 4px 15px rgba(143, 111, 92, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .ghibli-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(143, 111, 92, 0.2);
+      }
+
+      .btn-ghibli {
+        background-color: var(--ghibli-blue);
+        transition: all 0.3s ease;
+      }
+
+      .btn-ghibli:hover {
+        background-color: #6ab0e8;
+        transform: translateY(-2px);
+      }
+
+      .header-title {
+        color: var(--ghibli-brown);
+        position: relative;
+      }
+
+      .header-title::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--ghibli-blue);
+      }
+
+      .dino-container {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        margin: 2rem 0;
+      }
+
+      .dino-ground {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--ghibli-brown);
+      }
+
+      .offline-message {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-left: 4px solid var(--ghibli-blue);
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .bounce {
+        animation: bounce 1s infinite;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen p-4 md:p-8">
+    <div class="container mx-auto">
+      <!-- App Header -->
+      <header class="text-center mb-8">
+        <h1
+          class="text-3xl md:text-4xl font-bold header-title inline-block mx-auto"
+        >
+          Locci Farm
+        </h1>
+        <p class="text-ghibli-brown mt-2">Oops! You're currently offline</p>
+      </header>
+
+      <!-- Offline Section -->
+      <section class="ghibli-card p-6 mb-8 text-center">
+        <div class="dino-container flex justify-center items-end">
+          <img
+            src="/images/offline-dino.gif"
+            alt="Offline Dinosaur"
+            class="h-32 bounce"
+          />
+          <div class="dino-ground"></div>
+        </div>
+
+        <h2 class="text-2xl font-semibold mb-4 text-center text-gray-700">
+          No Internet Connection
+        </h2>
+
+        <p class="text-gray-600 mb-6 max-w-lg mx-auto">
+          It looks like you're not connected to the internet right now. Don't
+          worry, you can still view your previously saved transactions and add
+          new ones that will sync when you're back online.
+        </p>
+
+        <div
+          class="offline-message p-4 mb-6 rounded-md text-left max-w-lg mx-auto"
+        >
+          <h3 class="font-medium text-gray-800 mb-2">
+            While offline, you can:
+          </h3>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>View your previously saved transactions</li>
+            <li>Add new transactions (they'll sync when you're back online)</li>
+            <li>View your financial summary and charts</li>
+          </ul>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4">
+          <button
+            id="retry-connection"
+            class="btn-ghibli py-2 px-6 rounded-md text-white font-medium"
+          >
+            Retry Connection
+          </button>
+
+          <a
+            href="index.html"
+            class="py-2 px-6 rounded-md border border-gray-300 text-gray-700 font-medium hover:bg-gray-50"
+          >
+            Continue in Offline Mode
+          </a>
+        </div>
+      </section>
+
+      <!-- Cached Data Section -->
+      <div class="ghibli-card p-6">
+        <h2 class="text-xl font-semibold mb-4">Your Cached Data</h2>
+
+        <div id="cached-data-status" class="text-center py-12">
+          <div class="inline-block mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-16 w-16 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+              />
+            </svg>
+          </div>
+          <p class="text-gray-600">
+            Your previously saved transactions are still available.
+            <br />View or add transactions in offline mode.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-12 text-center text-gray-600 text-sm">
+      <p>
+        &copy; 2025 Expense Tracker | <a href="#" class="underline">Help</a>
+      </p>
+    </footer>
+
+    <script>
+      // Check if we're actually offline
+      function updateOnlineStatus() {
+        const statusDisplay = document.getElementById("cached-data-status");
+
+        if (navigator.onLine) {
+          statusDisplay.innerHTML = `
+            <div class="inline-block mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p class="text-gray-600">
+              Great! You're back online. Redirecting to the main page...
+            </p>
+          `;
+
+          // Redirect after a short delay
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 30000);
+        }
+      }
+
+      // Add event listeners for online/offline events
+      window.addEventListener("online", updateOnlineStatus);
+      window.addEventListener("offline", updateOnlineStatus);
+
+      // Initial check
+      updateOnlineStatus();
+
+      // Retry connection button
+      document
+        .getElementById("retry-connection")
+        .addEventListener("click", function () {
+          window.location.reload();
+        });
+
+      // Register service worker if not already registered
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/service-worker.js").then(
+            function (registration) {
+              console.log(
+                "ServiceWorker registration successful with scope: ",
+                registration.scope
+              );
+            },
+            function (err) {
+              console.log("ServiceWorker registration failed: ", err);
+            }
+          );
+        });
+      }
+    </script>
+  </body>
+</html>
